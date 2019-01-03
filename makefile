@@ -71,8 +71,11 @@ all: $(BOARD)_$(FPGA_SIZE)f_$(PROJECT).bit $(BOARD)_$(FPGA_SIZE)f_$(PROJECT).svf
 firmware.elf: sections.lds start.s firmware.c
 	$(RISCV32-GCC) -march=rv32i -mabi=ilp32 -Wl,-Bstatic,-T,sections.lds,--strip-debug -ffreestanding -nostdlib -o firmware.elf start.s firmware.c
 
-firmware.hex: firmware.elf
-	$(RISCV32-OBJCOPY) -O verilog firmware.elf /dev/stdout > firmware.hex
+firmware.bin: firmware.elf
+	$(RISCV32-OBJCOPY) -O binary firmware.elf /dev/stdout > firmware.bin
+
+firmware.hex: firmware.bin
+	python3 makehex.py $^ 4096 > $@
 
 #$(PROJECT).ys: makefile
 #	$(SCRIPTS)/ysgen.sh $(VERILOG_FILES) $(VHDL_TO_VERILOG_FILES) > $@
@@ -85,7 +88,7 @@ firmware.hex: firmware.elf
 $(PROJECT).json: $(VERILOG_FILES) $(VHDL_TO_VERILOG_FILES)
 	$(YOSYS) \
 	-p "hierarchy -top ${TOP_MODULE}" \
-	-p "synth_ecp5 -noccu2 -nomux -nodram -json ${PROJECT}.json" \
+	-p "synth_ecp5 -json ${PROJECT}.json" \
 	$(VERILOG_FILES) $(VHDL_TO_VERILOG_FILES)
 
 $(BOARD)_$(FPGA_SIZE)f_$(PROJECT).config: $(PROJECT).json $(BASECFG)
@@ -164,7 +167,7 @@ JUNK += $(BOARD)_$(FPGA_SIZE)f_$(PROJECT).vme
 JUNK += $(BOARD)_$(FPGA_SIZE)f_$(PROJECT).svf
 JUNK += $(BOARD)_$(FPGA_SIZE)f.xcf
 JUNK += $(BOARD)_$(FPGA_SIZE)f.ocd
-JUNK += firmware.elf firmware.hex
+JUNK += firmware.elf firmware.bin firmware.hex
 JUNK += $(DTD_FILE)
 
 clean:
