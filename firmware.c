@@ -24,7 +24,7 @@ void delay() {
 }
 
 int main() {
-    reg_uart_clkdiv = 416;
+    reg_uart_clkdiv = 416/2;
     while (1) {
         LED = 0xFF;
         print("hello world\n");
