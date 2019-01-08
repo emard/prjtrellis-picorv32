@@ -1,7 +1,3 @@
-#include <stdint.h>
-
-#define NULL 0
-
 #define LED (*(volatile uint32_t*)0x02000000)
 
 #define reg_uart_clkdiv (*(volatile uint32_t*)0x02000004)
@@ -14,7 +10,7 @@ int getchar_available()
 
 char getchar()
 {
-  return reg_uart_data & 0xFF;
+  return reg_uart_data;
 }
 
 void putchar(char c)
@@ -24,13 +20,12 @@ void putchar(char c)
     reg_uart_data = c;
 }
 
-void main(void)
+void
+sio_boot(void)
 {
 	int c, cnt, pos, val, len;
 	char *cp;
 	void *base_addr = NULL;
-
-        reg_uart_clkdiv = 416/2; // sets baudrate 115200 @ 25 MHz
 
 	/* Appease gcc's uninitialized variable warnings */
 	val = 0;
@@ -60,7 +55,6 @@ loop:
 	do {
 		if (pos < 0) {
 			// RDTSC(val);
-			val++;
 			if (val & 0x08000000)
 				c = 0xff;
 			else
@@ -71,10 +65,9 @@ loop:
 				LED = c ^ 0xf0;
 		} else
 			LED = (int) cp >> 8;
-		c = reg_uart_data;
-	} while ( (c & 0x100) == 0);
-	// c = getchar();
-	c &= 0xFF;
+		c = getchar_available();
+	} while (c == 0);
+	c = getchar();
 
 	if (pos < 0) {
 		if (c == 'S')
@@ -84,7 +77,7 @@ loop:
 				goto prompt;
 			/* Echo char */
 			if (c >= 32)
-				putchar(c);
+				pchar(c);
 		}
 		val = 0;
 		goto loop;

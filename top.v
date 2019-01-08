@@ -1,19 +1,13 @@
 module top(
     input clk_25mhz,
+    input [6:0] btn,
     output [7:0] led,
     output ftdi_rxd,
     input ftdi_txd,
     output wifi_gpio0
 );
 
-assign wifi_gpio0 = 1'b1;
-
-/*
-pll_12_50 pll(
-    .clki(clk_25mhz),
-    .clko(clk)
-);
-*/
+assign wifi_gpio0 = btn[0]; // hold btn0 -> escape to ESP32/OLED control
 
 attosoc soc(
     .clk(clk_25mhz),
