@@ -104,12 +104,21 @@ loop:
 	/* Address width */
 	if (pos == 1) {
 		if (val >= 7 && val <= 9) {
+			#if 0
+			// binary countdown leds before jumping to new code
+			for(int j = 10; j >= 0; j--)
+			{
+			  for(int k = 0; k < 100000; k++)
+			    asm("nop");
+			  LED = j;
+			}
+			#endif
 			__asm __volatile__(
-			"lui s0, 0x8000;"	/* stack mask */
-			"lui s1, 0x1000;"	/* top of the initial stack */
-			"and sp, %0, s0;"	/* clr low bits of the stack */
-			"or sp, sp, s1;"	/* set stack */
-			"mv ra, zero;"	
+			//"lui s0, 0x8000;"	/* stack mask */
+			//"lui s1, 0x1000;"	/* top of the initial stack */
+			//"and sp, %0, s0;"	/* clr low bits of the stack */
+			//"or sp, sp, s1;"	/* set stack */
+			//"mv ra, zero;"
 			"jr %0;"
 			: 
 			: "r" (base_addr)

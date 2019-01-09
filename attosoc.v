@@ -28,7 +28,7 @@ module attosoc (
 	input clk,
 	output reg [7:0] led,
 	output uart_tx,
-	input uart_rx,
+	input uart_rx
 );
 
 	reg [5:0] reset_cnt = 0;

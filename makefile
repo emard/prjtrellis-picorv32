@@ -17,6 +17,8 @@ F32C-COMPILER-PATH=~davor/.arduino15/packages/FPGArduino/tools/f32c-compiler/1.0
 RISCV32-GCC=$(F32C-COMPILER-PATH)/riscv32-elf-gcc
 RISCV32-OBJCOPY=$(F32C-COMPILER-PATH)/riscv32-elf-objcopy
 
+firmware.hex:
+
 firmware.elf: sections.lds start.s firmware.c
 	$(RISCV32-GCC) -march=rv32i -mabi=ilp32 -Wl,-Bstatic,-T,sections.lds,--strip-debug -ffreestanding -nostdlib -o firmware.elf start.s firmware.c
 
