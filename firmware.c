@@ -58,6 +58,7 @@ next:
 loop:
 	/* Blink LEDs while waiting for serial input */
 	do {
+		#if 0
 		if (pos < 0) {
 			// RDTSC(val);
 			val++;
@@ -71,10 +72,12 @@ loop:
 				LED = c ^ 0xf0;
 		} else
 			LED = (int) cp >> 8;
+		#endif
 		c = reg_uart_data;
 	} while ( (c & 0x100) == 0);
 	// c = getchar();
 	c &= 0xFF;
+	LED = c;
 
 	if (pos < 0) {
 		if (c == 'S')
@@ -113,6 +116,10 @@ loop:
 			  LED = j;
 			}
 			#endif
+			
+			((void (*)(void))base_addr)();
+			
+			#if 0
 			__asm __volatile__(
 			//"lui s0, 0x8000;"	/* stack mask */
 			//"lui s1, 0x1000;"	/* top of the initial stack */
@@ -123,6 +130,7 @@ loop:
 			: 
 			: "r" (base_addr)
 			);
+			#endif
 		}
 		if (val <= 3)
 			len = (val << 1) + 5;
