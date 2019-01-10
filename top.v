@@ -11,6 +11,7 @@ assign wifi_gpio0 = btn[0]; // hold btn0 -> escape to ESP32/OLED control
 
 attosoc soc(
     .clk(clk_25mhz),
+    .reset_n(btn[0]),
     .led(led),
     .uart_tx(ftdi_rxd),
     .uart_rx(ftdi_txd)

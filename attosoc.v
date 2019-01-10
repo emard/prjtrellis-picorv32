@@ -26,6 +26,7 @@
 
 module attosoc (
 	input clk,
+	input reset_n,
 	output reg [7:0] led,
 	output uart_tx,
 	input uart_rx
@@ -35,7 +36,10 @@ module attosoc (
 	wire resetn = &reset_cnt;
 
 	always @(posedge clk) begin
-		reset_cnt <= reset_cnt + !resetn;
+		if (reset_n == 0)
+			reset_cnt <= 0;
+		else
+			reset_cnt <= reset_cnt + !resetn;
 	end
 
 	parameter integer MEM_WORDS = 8192;
@@ -110,7 +114,7 @@ module attosoc (
 		.PROGADDR_IRQ(32'h 0000_0000),
 		.BARREL_SHIFTER(0),
 		.COMPRESSED_ISA(0),
-		.ENABLE_MUL(0),
+		.ENABLE_MUL(1),
 		.ENABLE_DIV(0),
 		.ENABLE_IRQ(0),
 		.ENABLE_IRQ_QREGS(0)
