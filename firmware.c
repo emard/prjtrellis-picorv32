@@ -108,12 +108,20 @@ loop:
 	if (pos == 1) {
 		if (val >= 7 && val <= 9) {
 			#if 0
-			// binary countdown leds before jumping to new code
-			for(int j = 10; j >= 0; j--)
+			// overwrite first few bytes
+			#if 0
+			for(c = 0; c < 32; c++)
 			{
+			  ((char *)base_addr)[c] = c;
+			}
+			#endif
+			// binary blink leds reading first few 
+			// uploaded bytes before jumping to this new code
+			for(c = 0; c < 32; c++)
+			{
+			  LED = ((char *)base_addr)[c];
 			  for(int k = 0; k < 100000; k++)
 			    asm("nop");
-			  LED = j;
 			}
 			#endif
 			
@@ -121,11 +129,11 @@ loop:
 			
 			#if 0
 			__asm __volatile__(
-			//"lui s0, 0x8000;"	/* stack mask */
-			//"lui s1, 0x1000;"	/* top of the initial stack */
-			//"and sp, %0, s0;"	/* clr low bits of the stack */
-			//"or sp, sp, s1;"	/* set stack */
-			//"mv ra, zero;"
+			"lui s0, 0x0000;"	/* stack mask */
+			"lui s1, 0x8000;"	/* top of the initial stack */
+			"and sp, %0, s0;"	/* clr low bits of the stack */
+			"or sp, sp, s1;"	/* set stack */
+			"mv ra, zero;"
 			"jr %0;"
 			: 
 			: "r" (base_addr)
