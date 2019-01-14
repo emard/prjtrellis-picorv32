@@ -125,14 +125,11 @@ loop:
 			}
 			#endif
 			
-			((void (*)(void))base_addr)();
+			// ((void (*)(void))base_addr)();
 			
-			#if 0
+			#if 1
 			__asm __volatile__(
-			"lui s0, 0x0000;"	/* stack mask */
-			"lui s1, 0x8000;"	/* top of the initial stack */
-			"and sp, %0, s0;"	/* clr low bits of the stack */
-			"or sp, sp, s1;"	/* set stack */
+			"li s0, 0x00007FF0;"	/* stack address */
 			"mv ra, zero;"
 			"jr %0;"
 			: 
