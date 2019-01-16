@@ -10,17 +10,11 @@ Bootloader works at 115200 baud, responds with rv32> prompt and
 accepts fpgardino's "HEX" protocol (HEX is not a real protocol
 it is just upload of SREC file to the prompt and ignoring the CRCs).
 
-Bootloader correctly fills memory with received data and I think
-more or less correctly executes a jumps to the new code, I tried
-to upload different binaries and they behave different.
+picorv32 SOC will halt on any bus error, usually any f32c specific
+iomem soc access will halt it. For quick fix in FPGArduino, comment
+f32c specific initialization in make.cpp:
 
-But compiled code from FPGArduino doesn't work properly
-(doesn't blink, doesn't print etc).
-
-Maybe it's some minor issue like initial settings of stack
-pointers and other registers in FPGArduino's start.s,
-wrong compiler options in FPGArduino's "boards.txt" or 
-"platform.txt" or some similar issue.
-
-Maybe you can help?
+    ~/.arduino15/packages/FPGArduino/hardware/f32c/1.0.0/cores/f32c/main.cpp
+    around line 46:
+    // f32c_specific_initialization();
 
