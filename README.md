@@ -11,14 +11,15 @@ accepts fpgardino's "HEX" protocol (HEX is not a real protocol
 it is just upload of SREC file to the prompt and ignoring the CRCs).
 
 picorv32 SOC will halt on any bus error, usually any f32c specific
-iomem soc access will halt it. For quick fix in FPGArduino, comment
-f32c specific initialization in make.cpp:
+iomem soc access will halt it. To avoid f32c specific initialization
+in FPGArduino select "Generic board" and CPU "RISC-V".
+This will avoid  f32c_specific_initialization() in make.cpp:
 
     ~/.arduino15/packages/FPGArduino/hardware/f32c/1.0.0/cores/f32c/main.cpp
     around line 46:
     // f32c_specific_initialization();
 
-So don't use digitalWrite() for now. Do your picorv32 blinkled like this:
+Also don't use digitalWrite() for now. Do your picorv32 blinkled like this:
 
     #define LED (*(volatile uint32_t*)0x02000000)
     LED = 0;
