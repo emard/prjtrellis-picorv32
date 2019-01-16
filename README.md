@@ -18,3 +18,8 @@ f32c specific initialization in make.cpp:
     around line 46:
     // f32c_specific_initialization();
 
+So don't use digitalWrite() for now. Do your picorv32 blinkled like this:
+
+    #define LED (*(volatile uint32_t*)0x02000000)
+    LED = 0;
+    LED = 0xFF;
