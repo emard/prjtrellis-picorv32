@@ -109,36 +109,15 @@ loop:
 
 	/* Address width */
 	if (pos == 1) {
-		if (val >= 7 && val <= 9) {
-			#if 0
-			// overwrite first few bytes
-			#if 0
-			for(c = 0; c < 32; c++)
-			{
-			  ((char *)base_addr)[c] = c;
-			}
-			#endif
-			// binary blink leds reading first few 
-			// uploaded bytes before jumping to this new code
-			for(c = 0; c < 32; c++)
-			{
-			  LED = ((char *)base_addr)[c];
-			  for(int k = 0; k < 100000; k++)
-			    asm("nop");
-			}
-			#endif
-			
-			// ((void (*)(void))base_addr)();
-			
-			#if 1
+		if (val >= 7 && val <= 9)
+		{
 			__asm __volatile__(
-			"li s0, 0x00007FF0;"	/* stack address */
+			"li s0, 0x00008000;"	/* 32K RAM top = stack address */
 			"mv ra, zero;"
 			"jr %0;"
 			: 
 			: "r" (base_addr)
 			);
-			#endif
 		}
 		if (val <= 3)
 			len = (val << 1) + 5;
