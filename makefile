@@ -1,7 +1,7 @@
 # ******* project, board and chip name *******
-PROJECT = dvi
+PROJECT = picorv32
 BOARD = ulx3s
-FPGA_SIZE = 85
+FPGA_SIZE = 12
 
 # ******* design files *******
 CONSTRAINTS = ulx3s_v20_segpdi.lpf
@@ -11,7 +11,7 @@ VERILOG_FILES = $(TOP_MODULE_FILE) attosoc.v picorv32.v simpleuart.v
 VHDL_TO_VERILOG_FILES =
 
 # synthesis options
-YOSYS_OPTIONS = -noccu2
+# YOSYS_OPTIONS = -noccu2
 
 F32C-COMPILER-PATH=~davor/.arduino15/packages/FPGArduino/tools/f32c-compiler/1.0.0/bin
 RISCV32-GCC=$(F32C-COMPILER-PATH)/riscv32-elf-gcc
