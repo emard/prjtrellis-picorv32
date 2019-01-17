@@ -4,6 +4,8 @@ Attempt to merry picorv32 and FPGArduino.
 Compiles with latest prjtrellis and fits to ECP5.
 People reported that it also compiles with arachne-pnr and fits to ICE40.
 
+# Bootloader
+
 "firmware.c" contains ported FPGArduino bootloader from f32c project
 (HEX mode-only, no binary). It compiles to less than 1024 bytes
 binary using the same RISC-V gcc from FPGArduino.
@@ -16,6 +18,34 @@ upload of SREC file to the prompt and ignoring the CRCs).
 Baud rate can be changed with uart clock divisor in "firmware.c"
 
     reg_uart_clkdiv = F_CPU/BAUD_RATE; // sets baudrate (115200 @ 25 MHz)
+
+FPGArduino by default uploads binary staring from 1K up.
+Bootloader starts from addr 0 and we try too keep it shorter than 1K.
+If the bootloader is longer, FPGArduino upload address can be changed
+in boards.txt.
+
+# Changing RAM size
+
+This project by default compiles FPGA core with 32K BRAM.
+If you need to change RAM size you should change something
+on several places:
+
+1. "attosoc.v": number of 8192 32-bit words = 32K RAM
+
+    parameter integer MEM_WORDS = 8192;
+
+2. "firmware.c": Bootloader should set stack pointer on RAM top before jumping to uploaded code:
+
+    __asm __volatile__(
+    li s0, 0x00008000;"	/* 32K RAM top = stack address */
+    "mv ra, zero;"
+    "jr %0;"
+
+3. "sections.lds": linker should know about the RAM top
+
+    RAM (xrw)       : ORIGIN = 0x00000000, LENGTH = 0x008000 /* 32 KB */
+
+# FPGArduino
 
 picorv32 SOC will halt on any bus error, usually any f32c specific
 iomem SOC access will halt it. Under FPGArduino "tools" pulldown menu,
