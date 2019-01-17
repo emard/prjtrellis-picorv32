@@ -1,10 +1,12 @@
 # prjtrellis-picorv32
 
-Attempt to merry picorv32 and FPGArduino.
+Attempt to merry picorv32 and FPGArduino. Compiles for ECP5 with prjtrellis
+and fits to 45F or 85F only. Currently on 25F it won't route, reason unknown.
+People report that it fits to ICE40 normally.
 
-FPGArduino bootloader from f32c project (HEX mode-only, no binary)
-is included as picorv32 firmware and compiles to less than 1024 bytes
-binary.
+"firmware.c" contains ported FPGArduino bootloader from f32c project
+(HEX mode-only, no binary). It compiles to less than 1024 bytes
+binary using the same RISC-V gcc from FPGArduino.
 
 Bootloader works at 115200 baud from 25 MHz clock.
 Responds with rv32> prompt and accepts fpgardino's

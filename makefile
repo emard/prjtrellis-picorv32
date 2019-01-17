@@ -1,7 +1,8 @@
 # ******* project, board and chip name *******
 PROJECT = picorv32
 BOARD = ulx3s
-FPGA_SIZE = 12
+# 12 25 45 85 (but this project routes only on 45 and 85)
+FPGA_SIZE = 45
 
 # ******* design files *******
 CONSTRAINTS = ulx3s_v20_segpdi.lpf
