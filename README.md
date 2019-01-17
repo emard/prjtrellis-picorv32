@@ -1,8 +1,8 @@
 # prjtrellis-picorv32
 
-Attempt to merry picorv32 and FPGArduino. Compiles for ECP5 with prjtrellis
-and fits to 45F or 85F only. Currently on 25F it won't route, reason unknown.
-People report that it fits to ICE40 normally.
+Attempt to merry picorv32 and FPGArduino.
+Compiles with latest prjtrellis and fits to ECP5.
+People reported that it also compiles with arachne-pnr and fits to ICE40.
 
 "firmware.c" contains ported FPGArduino bootloader from f32c project
 (HEX mode-only, no binary). It compiles to less than 1024 bytes
