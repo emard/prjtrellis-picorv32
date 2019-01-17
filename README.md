@@ -36,7 +36,8 @@ f32c_specific_initialization() in make.cpp:
 
 Also don't use digitalWrite() or anything similar for now.
 Do your picorv32 IO directly to hardware iomem address.
-Blinky should look this:
+
+LED Blinky should look like this:
 
     #define LED (*(volatile uint32_t*)0x02000000)
     void setup()
