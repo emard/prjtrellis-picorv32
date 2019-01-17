@@ -7,6 +7,9 @@
 #define reg_uart_clkdiv (*(volatile uint32_t*)0x02000004)
 #define reg_uart_data (*(volatile uint32_t*)0x02000008)
 
+#define F_CPU 25000000 // Hz
+#define BAUD_RATE 115200 // bit/s
+
 int getchar_available()
 {
   return reg_uart_data & 0x100;
@@ -30,7 +33,7 @@ void main(void)
 	char *cp;
 	void *base_addr = NULL;
 
-        reg_uart_clkdiv = 416/2; // sets baudrate 115200 @ 25 MHz
+        reg_uart_clkdiv = F_CPU/BAUD_RATE; // sets baudrate (115200 @ 25 MHz)
 
 	/* Appease gcc's uninitialized variable warnings */
 	val = 0;

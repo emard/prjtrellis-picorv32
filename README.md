@@ -9,13 +9,13 @@ People reported that it also compiles with arachne-pnr and fits to ICE40.
 binary using the same RISC-V gcc from FPGArduino.
 
 Bootloader works at 115200 baud from 25 MHz clock.
-Responds with rv32> prompt and accepts fpgardino's
+Responds with "rv32>" prompt and accepts FPGArdino's
 "HEX" protocol (HEX is not a real protocol it is just
 upload of SREC file to the prompt and ignoring the CRCs).
 
 Baud rate can be changed with uart clock divisor in "firmware.c"
 
-    reg_uart_clkdiv = 416/2; // sets baudrate 115200 @ 25 MHz
+    reg_uart_clkdiv = F_CPU/BAUD_RATE; // sets baudrate (115200 @ 25 MHz)
 
 picorv32 SOC will halt on any bus error, usually any f32c specific
 iomem SOC access will halt it. Under FPGArduino "tools" pulldown menu,
