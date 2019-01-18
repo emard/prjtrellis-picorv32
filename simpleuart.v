@@ -24,6 +24,8 @@ module simpleuart (
 	output ser_tx,
 	input  ser_rx,
 
+	output break,
+
 	input   [3:0] reg_div_we,
 	input  [31:0] reg_div_di,
 	output [31:0] reg_div_do,
@@ -46,6 +48,8 @@ module simpleuart (
 	reg [3:0] send_bitcnt;
 	reg [31:0] send_divcnt;
 	reg send_dummy;
+	
+	reg break;
 
 	assign reg_div_do = cfg_divider;
 
@@ -90,6 +94,25 @@ module simpleuart (
 					if (recv_divcnt > cfg_divider) begin
 						recv_buf_data <= recv_pattern;
 						recv_buf_valid <= 1;
+						recv_state <= 11;
+					end
+				end
+				11: begin
+					if (ser_rx)
+					begin
+						recv_state <= 0;
+						recv_divcnt <= 0;
+					end
+					else
+					begin
+						break <= 1;
+						recv_state <= 12;
+					end
+				end
+				12: begin
+					if (ser_rx)
+					begin
+						break <= 0;
 						recv_state <= 0;
 					end
 				end

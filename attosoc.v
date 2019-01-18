@@ -31,9 +31,10 @@ module attosoc (
 	output uart_tx,
 	input uart_rx
 );
-
+	wire break;
 	reg [5:0] reset_cnt = 0;
 	wire resetn = &reset_cnt;
+	wire resetncpu = resetn & !break;
 
 	always @(posedge clk) begin
 		if (reset_n == 0)
@@ -120,7 +121,7 @@ module attosoc (
 		.ENABLE_IRQ_QREGS(0)
 	) cpu (
 		.clk         (clk        ),
-		.resetn      (resetn     ),
+		.resetn      (resetncpu  ),
 		.mem_valid   (mem_valid  ),
 		.mem_instr   (mem_instr  ),
 		.mem_ready   (mem_ready  ),
@@ -136,6 +137,7 @@ module attosoc (
 
 		.ser_tx      (uart_tx     ),
 		.ser_rx      (uart_rx     ),
+		.break       (break       ),
 
 		.reg_div_we  (simpleuart_reg_div_sel ? mem_wstrb : 4'b 0000),
 		.reg_div_di  (mem_wdata),
