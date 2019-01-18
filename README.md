@@ -24,6 +24,8 @@ Bootloader starts from addr 0 and we try too keep it shorter than 1K.
 If the bootloader is longer, FPGArduino upload address can be changed
 in boards.txt.
 
+    fpga_generic.menu.ramsize.32.compiler.ld.extra_flags=--section-start=.init=0x400
+
 # Changing RAM size
 
 This project by default compiles FPGA core with 32K BRAM.
