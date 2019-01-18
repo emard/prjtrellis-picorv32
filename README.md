@@ -39,9 +39,9 @@ on several places:
 2. "firmware.c": Bootloader should set stack pointer on RAM top before jumping to uploaded code:
 
     __asm __volatile__(
-    "li s0, 0x00008000;" /* 32K RAM top = stack address */
-    "mv ra, zero;"
-    "jr %0;"
+    li s0, 0x00008000; /* 32K RAM top = stack address */
+    mv ra, zero;
+    jr %0;
 
 3. "sections.lds": linker should know about the RAM top
 
